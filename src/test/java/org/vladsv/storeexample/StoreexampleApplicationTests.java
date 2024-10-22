@@ -1,0 +1,13 @@
+package org.vladsv.storeexample;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class StoreexampleApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
