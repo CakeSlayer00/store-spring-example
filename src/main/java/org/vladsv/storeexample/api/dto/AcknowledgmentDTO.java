@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class AskDTO {
+public class AcknowledgmentDTO {
     private Boolean answer;
 }

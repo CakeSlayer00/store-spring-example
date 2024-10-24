@@ -3,7 +3,7 @@ package org.vladsv.storeexample.api.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.vladsv.storeexample.api.controllers.helper.ProductHelper;
-import org.vladsv.storeexample.api.dto.AskDTO;
+import org.vladsv.storeexample.api.dto.AcknowledgmentDTO;
 import org.vladsv.storeexample.api.dto.ReviewDTO;
 import org.vladsv.storeexample.api.exceptions.BadRequestException;
 import org.vladsv.storeexample.api.exceptions.NotFoundException;
@@ -64,6 +64,7 @@ public class ReviewController {
 
         product.getReviews().add(review);
 
+        // TODO: apparently i have to change here too.
         reviewRepository.saveAndFlush(review);
         productRepository.saveAndFlush(product);
 
@@ -129,13 +130,13 @@ public class ReviewController {
     }
 
     @DeleteMapping(DELETE_REVIEW)
-    public AskDTO deleteProduct(
+    public AcknowledgmentDTO deleteProduct(
             @PathVariable Long id
     ) {
         ReviewEntity review = getReviewOrThrowException(id);
         reviewRepository.delete(review);
 
-        return AskDTO.builder().answer(true).build();
+        return AcknowledgmentDTO.builder().answer(true).build();
     }
 
     private ReviewEntity getReviewOrThrowException(Long id) {

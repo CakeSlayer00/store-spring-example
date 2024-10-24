@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.vladsv.storeexample.api.dto.CategoryDTO;
 import org.vladsv.storeexample.store.entities.CategoryEntity;
 
-//Shall i make it static?
+//TODO:Shall i make it static?
 @RequiredArgsConstructor
 @Component
 public class CategoryMapper {

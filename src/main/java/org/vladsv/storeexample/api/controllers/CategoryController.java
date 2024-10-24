@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import org.vladsv.storeexample.api.controllers.helper.CategoryHelper;
-import org.vladsv.storeexample.api.dto.AskDTO;
+import org.vladsv.storeexample.api.dto.AcknowledgmentDTO;
 import org.vladsv.storeexample.api.dto.CategoryDTO;
 import org.vladsv.storeexample.api.exceptions.BadRequestException;
 import org.vladsv.storeexample.api.mappers.CategoryMapper;
@@ -14,6 +14,7 @@ import org.vladsv.storeexample.store.repositories.CategoryRepository;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
+//TODO: Could use @Transactional for proper db work.
 public class CategoryController {
 
     private final CategoryRepository categoryRepository;
@@ -58,7 +59,7 @@ public class CategoryController {
     @PutMapping(UPDATE_CATEGORY)
     public CategoryDTO updateCategory(
             @PathVariable("id") Long id,
-            @RequestParam String name) {
+            @RequestParam String name) { //TODO:is there a way to get whole body and get data from it so it dont look silly?
         if(name.trim().isEmpty()) {
             throw new BadRequestException("Category name cannot be empty");
         }
@@ -72,11 +73,11 @@ public class CategoryController {
     }
 
     @DeleteMapping(DELETE_CATEGORY)
-    public AskDTO deleteCategory(@PathVariable("id") Long id) {
+    public AcknowledgmentDTO deleteCategory(@PathVariable("id") Long id) {
         CategoryEntity category = categoryHelper.getCategoryOrThrowException(id);
 
         categoryRepository.delete(category);
-        return AskDTO.builder().answer(true).build();
+        return AcknowledgmentDTO.builder().answer(true).build();
     }
 
 }

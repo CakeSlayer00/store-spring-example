@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.vladsv.storeexample.api.controllers.helper.CategoryHelper;
 import org.vladsv.storeexample.api.controllers.helper.ProductHelper;
-import org.vladsv.storeexample.api.dto.AskDTO;
+import org.vladsv.storeexample.api.dto.AcknowledgmentDTO;
 import org.vladsv.storeexample.api.dto.ProductDTO;
 import org.vladsv.storeexample.api.exceptions.BadRequestException;
 import org.vladsv.storeexample.api.mappers.ProductMapper;
@@ -55,6 +55,8 @@ public class ProductController {
             throw new BadRequestException("Price cannot be NaN");
         }
 
+        //TODO: and this pile of IFs
+
         CategoryEntity category = categoryHelper.getCategoryOrThrowException(categoryId);
 
         ProductEntity product = ProductEntity.builder()
@@ -68,7 +70,7 @@ public class ProductController {
         }
 
         productRepository.saveAndFlush(product);
-
+        //TODO: is there a way to change this shite?
         category.getProducts().add(product);
         categoryRepository.saveAndFlush(category);
 
@@ -125,26 +127,25 @@ public class ProductController {
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
-        productRepository.saveAndFlush(product);
 
+        productRepository.saveAndFlush(product);
         if (!checkWhetherProductBelongsToCategory(product, category)) {
             category.getProducts().add(product);
         }
-
         categoryRepository.saveAndFlush(category);
 
         return productMapper.map(product);
     }
 
     @DeleteMapping(DELETE_PRODUCT)
-    public AskDTO deleteProduct(
+    public AcknowledgmentDTO deleteProduct(
             @PathVariable Long id
     ) {
         ProductEntity product = productHelper.getProductOrThrowException(id);
 
         productRepository.delete(product);
 
-        return AskDTO.builder().answer(true).build();
+        return AcknowledgmentDTO.builder().answer(true).build();
     }
 
     private boolean checkWhetherProductBelongsToCategory(ProductEntity product, CategoryEntity category) {
