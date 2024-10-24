@@ -64,13 +64,13 @@ public class ProductController {
                 .build();
 
         if (checkWhetherProductBelongsToCategory(product, category)) {
-            category.getProducts().add(product);
-            categoryRepository.saveAndFlush(category);
-        } else {
-            throw new BadRequestException("Product already in this category");
+            throw new BadRequestException("Product already exists");
         }
 
         productRepository.saveAndFlush(product);
+
+        category.getProducts().add(product);
+        categoryRepository.saveAndFlush(category);
 
         return productMapper.map(product);
 
@@ -125,13 +125,13 @@ public class ProductController {
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
+        productRepository.saveAndFlush(product);
 
-        if (checkWhetherProductBelongsToCategory(product, category)) {
+        if (!checkWhetherProductBelongsToCategory(product, category)) {
             category.getProducts().add(product);
-            categoryRepository.saveAndFlush(category);
         }
 
-        productRepository.saveAndFlush(product);
+        categoryRepository.saveAndFlush(category);
 
         return productMapper.map(product);
     }
@@ -150,6 +150,6 @@ public class ProductController {
     private boolean checkWhetherProductBelongsToCategory(ProductEntity product, CategoryEntity category) {
         return category.getProducts()
                 .stream()
-                .noneMatch(p -> Objects.equals(p.getId(), product.getId()));
+                .anyMatch(p -> Objects.equals(p.getId(), product.getId()));
     }
 }

@@ -13,6 +13,7 @@ public class CategoryMapper {
     private final ProductMapper productMapper;
 
     public CategoryDTO map(CategoryEntity category) {
+
         return CategoryDTO.builder()
                 .id(category.getId())
                 .name(category.getName())

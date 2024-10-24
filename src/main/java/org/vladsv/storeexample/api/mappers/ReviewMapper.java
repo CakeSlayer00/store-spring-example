@@ -6,7 +6,9 @@ import org.vladsv.storeexample.store.entities.ReviewEntity;
 
 @Component
 public class ReviewMapper {
+
     public ReviewDTO map(ReviewEntity review) {
+
         return ReviewDTO.builder()
                 .id(review.getId())
                 .title(review.getTitle())
@@ -14,4 +16,5 @@ public class ReviewMapper {
                 .content(review.getContent())
                 .build();
     }
+
 }
