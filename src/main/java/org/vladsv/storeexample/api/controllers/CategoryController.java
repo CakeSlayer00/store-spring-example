@@ -8,6 +8,7 @@ import org.vladsv.storeexample.api.dto.AcknowledgmentDTO;
 import org.vladsv.storeexample.api.dto.CategoryDTO;
 import org.vladsv.storeexample.api.exceptions.BadRequestException;
 import org.vladsv.storeexample.api.mappers.CategoryMapper;
+import org.vladsv.storeexample.kafka.KafkaProducer;
 import org.vladsv.storeexample.store.entities.CategoryEntity;
 import org.vladsv.storeexample.store.repositories.CategoryRepository;
 
@@ -22,6 +23,8 @@ public class CategoryController {
     private final CategoryMapper categoryMapper;
 
     private final CategoryHelper categoryHelper;
+
+    private final KafkaProducer kafkaProducer;
 
     public static final String CREATE_CATEGORY = "api/v1/categories";
     public static final String GET_CATEGORY = "api/v1/categories/{id}";
@@ -44,6 +47,8 @@ public class CategoryController {
         CategoryEntity category = categoryRepository.saveAndFlush(CategoryEntity.builder()
                 .name(name)
                 .build());
+
+        kafkaProducer.sendMessage(String.format("category with name %s created", name));
 
         return categoryMapper.map(category);
     }
